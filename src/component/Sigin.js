@@ -61,14 +61,14 @@ export default function Signin() {
       userid: username,
       passwd: password
     });
-    if (response && response.status === "success") {
+    if (response && response.data && response.data.status === "success") {
       swal("Success", "You are now logged in!", "success", {
         buttons: false,
         timer: 2000,
       })
       .then((value) => {
-        localStorage.setItem('jtoken', response.data.jtoken);
-        localStorage.setItem('user', JSON.stringify(response.data));
+        localStorage.setItem('jtoken', response.data.data.jtoken);
+        localStorage.setItem('user', JSON.stringify(response.data.data));
         window.location.href = "/profile";
       });
     } else {
