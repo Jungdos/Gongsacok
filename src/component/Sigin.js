@@ -9,7 +9,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import swal from 'sweetalert';
-import axios from 'axios'
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,42 +39,107 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 async function loginUser(credentials) {
-  return axios.post('http://devback.gongsacok.com:8080/pub/login', credentials, {
+  return axios({
+    method: 'post',
+    url: 'http://devback.gongsacok.com:8080/pub/login',
     headers: {
       'Content-Type': 'application/json'
-    }
+    },
+    data: credentials
   })
   .then(response => response.data)
   .catch(error => {
     console.error('There was an error!', error);
+    throw error;
+  });
+}
+
+async function registerUser(userData) {
+  return axios({
+    method: 'post',
+    url: 'http://devback.gongsacok.com:8080/pub/addUser',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data: userData
+  })
+  .then(response => {
+    if (response.data.status === 'success') {
+      swal('Success', 'You have successfully registered!', 'success', {
+        buttons: false,
+        timer: 2000,
+      }).then(() => {
+        window.location.href = '/login';
+      });
+    } else {
+      swal('Failed', 'Registration failed. Please check your inputs.', 'error');
+    }
+    return response.data;
+  })
+  .catch(error => {
+    console.error('There was an error!', error);
+    swal('Error', 'An error occurred during registration. Please try again later.', 'error');
+    throw error;
   });
 }
 
 export default function Signin() {
   const classes = useStyles();
-  const [username, setUserName] = useState();
-  const [password, setPassword] = useState();
 
-  const handleSubmit = async e => {
+  const [username, setUserName] = useState('');
+  const [password, setPassword] = useState('');
+  const [usernameRegister, setUsernameRegister] = useState('');
+  const [passwordRegister, setPasswordRegister] = useState('');
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await loginUser({
-      userid: username,
-      passwd: password
-    });
-    if (response && response.data && response.data.status === "success") {
-      swal("Success", "You are now logged in!", "success", {
-        buttons: false,
-        timer: 2000,
-      })
-      .then((value) => {
-        localStorage.setItem('jtoken', response.data.data.jtoken);
-        localStorage.setItem('user', JSON.stringify(response.data.data));
-        window.location.href = "/profile";
+    try {
+      const response = await loginUser({
+        userid: username,
+        passwd: password
       });
-    } else {
-      swal("Failed", "Login failed. Please check your username and password.", "error");
+  
+      console.log('Login API response:', response);
+  
+      if (response.status === 'success') {
+        swal('Success', 'You have successfully logged in!', 'success', {
+          buttons: false,
+          timer: 2000,
+        }).then(() => {
+          localStorage.setItem('jtoken', response.data.jtoken);
+          localStorage.setItem('user', JSON.stringify(response.data));
+          window.location.href = '/profile';
+        });
+      } else {
+        swal('Failed', 'Login failed. Please check your username and password.', 'error');
+      }
+    } catch (error) {
+      swal('Error', 'An error occurred during login. Please try again later.', 'error');
     }
-  }
+  };
+
+  const handleSubmitRegister = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await registerUser({
+        userid: usernameRegister,
+        passwd: passwordRegister
+      });
+  
+      if (response.status === 'success') {
+        swal('Success', 'You have successfully registered!', 'success', {
+          buttons: false,
+          timer: 2000,
+        }).then(() => {
+          window.location.href = '/login';
+        });
+      } else {
+        swal('Failed', 'Registration failed. Please check your inputs.', 'error');
+      }
+    } catch (error) {
+      swal('Error', 'An error occurred during registration. Please try again later.', 'error');
+    }
+  };
 
   return (
     <Grid container className={classes.root}>
@@ -86,10 +151,10 @@ export default function Signin() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign In
           </Typography>
           <form className={classes.form} noValidate onSubmit={handleSubmit}>
-          <TextField
+            <TextField
               variant="outlined"
               margin="normal"
               required
@@ -97,7 +162,8 @@ export default function Signin() {
               id="userid"
               name="userid"
               label="User ID"
-              onChange={e => setUserName(e.target.value)}
+              value={username}
+              onChange={(e) => setUserName(e.target.value)}
             />
             <TextField
               variant="outlined"
@@ -108,7 +174,8 @@ export default function Signin() {
               name="password"
               label="Password"
               type="password"
-              onChange={e => setPassword(e.target.value)}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <Button
               type="submit"
@@ -118,6 +185,41 @@ export default function Signin() {
               className={classes.submit}
             >
               Sign In
+            </Button>
+          </form>
+          <Typography component="h1" variant="h5">
+            Register
+          </Typography>
+          <form className={classes.form} noValidate onSubmit={handleSubmitRegister}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="usernameRegister"
+              label="Username for Register"
+              value={usernameRegister}
+              onChange={(e) => setUsernameRegister(e.target.value)}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="passwordRegister"
+              label="Password for Register"
+              type="password"
+              value={passwordRegister}
+              onChange={(e) => setPasswordRegister(e.target.value)}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Register
             </Button>
           </form>
         </div>
