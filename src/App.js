@@ -5,18 +5,22 @@ import Signin from './component/Sigin';
 import Profile from './component/Profile';
 
 function App() {
-  const token = localStorage.getItem('jtoken');
+  const token = localStorage.getItem('accessToken');
 
-  if (!token) {
-    return <Signin />;
+  if(!token) {
+    return <Signin />
   }
 
   return (
     <div className="wrapper">
       <BrowserRouter>
         <Routes>
-          <Route path="/Profile" element={<Profile />} />
-          <Route path="/" element={<Profile />} />
+          <Route path="/profile">
+            <Profile />
+          </Route>
+          <Route path="/">
+            <Profile />
+          </Route>
         </Routes>
       </BrowserRouter>
     </div>

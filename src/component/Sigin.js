@@ -10,7 +10,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import swal from 'sweetalert';
 import axios from 'axios';
-import * as us from '../services/UserService';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,13 +39,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 async function loginUser(credentials) {
-  return us.loginUser(credentials);
+  return axios({
+    method: 'post',
+    url: 'http://devback.gongsacok.com:8080/pub/login',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data: credentials
+  })
+  .then(response => response.data)
+  .catch(error => {
+    console.error('There was an error!', error);
+    throw error;
+  });
 }
 
 async function registerUser(userData) {
   return axios({
-    method: 'POST',
-    url: 'https://devawsback.gongsacok.com/pub/login',
+    method: 'post',
+    url: 'http://devback.gongsacok.com:8080/pub/addUser',
     headers: {
       'Content-Type': 'application/json'
     },
