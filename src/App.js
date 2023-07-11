@@ -1,26 +1,22 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Signin from './component/Sigin';
+import Sigin from './component/Sigin';
 import Profile from './component/Profile';
 
 function App() {
-  const token = localStorage.getItem('accessToken');
+  const token = localStorage.getItem('jtoken');
 
-  if(!token) {
-    return <Signin />
+  if (!token) {
+    return <Sigin />;
   }
 
   return (
     <div className="wrapper">
       <BrowserRouter>
         <Routes>
-          <Route path="/profile">
-            <Profile />
-          </Route>
-          <Route path="/">
-            <Profile />
-          </Route>
+          <Route path="/Profile" element={<Profile />} />
+          <Route path="/" element={<Sigin />} />
         </Routes>
       </BrowserRouter>
     </div>
