@@ -51,7 +51,7 @@ export default function Profile() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            Profile
+            프로필
           </Typography>
             <div>
             <IconButton onClick={handleMenu} color="inherit">
@@ -62,7 +62,7 @@ export default function Profile() {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              <MenuItem onClick={handleLogout}>로그아웃</MenuItem>
             </Menu>
           </div>
         </Toolbar>
@@ -71,7 +71,7 @@ export default function Profile() {
         <CardContent>
           <Avatar src={user.avatar} className={classes.large} />
           <Typography variant="h5">
-          Welcome {user.fname} {user.lname}
+          환영합니다! {user.fname} {user.lname}
           </Typography>
         </CardContent>
       </Card>

@@ -115,10 +115,11 @@ export default function Signin() {
         //asund (e) 라는 handleSubmit 함수를 실행하면서 페이지가 새로고침되는걸 막아준다.
     try {
       const response = await loginUser({
+        //try 라는 박스 안에서 axios요청으로 인해받아오는걸 시도하고 대기한다.
+        //loginUser의 함수를
         userid: username,
         passwd: password
       });
-        //try 라는 박스 안에서 loginUser 라는걸 받아오기까지 대기한다.
         // 그내용은 userid , passwd
       console.log('Login API response:', response);
         // 콘솔창에 Login API response 를 서버에서 받아온다.
@@ -183,7 +184,6 @@ export default function Signin() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign In
           </Typography>
           <form className={classes.form} noValidate onSubmit={handleSubmit}>
             <TextField
@@ -193,7 +193,7 @@ export default function Signin() {
               fullWidth
               id="userid"
               name="userid"
-              label="User ID"
+              label="아이디"
               value={username}
               onChange={(e) => setUserName(e.target.value)}
             />
@@ -204,7 +204,7 @@ export default function Signin() {
               fullWidth
               id="password"
               name="password"
-              label="Password"
+              label="비밀번호"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -216,11 +216,11 @@ export default function Signin() {
               color="primary"
               className={classes.submit}
             >
-              Sign In
+              로그인
             </Button>
           </form>
           <Typography component="h1" variant="h5">
-            Register
+
           </Typography>
           <form className={classes.form} noValidate onSubmit={handleSubmitRegister}>
             <TextField
@@ -229,7 +229,7 @@ export default function Signin() {
               required
               fullWidth
               id="usernameRegister"
-              label="Username for Register"
+              label="등록할 아이디"
               value={usernameRegister}
               onChange={(e) => setUsernameRegister(e.target.value)}
             />
@@ -239,7 +239,7 @@ export default function Signin() {
               required
               fullWidth
               id="passwordRegister"
-              label="Password for Register"
+              label="등록할 비밀번호"
               type="password"
               value={passwordRegister}
               onChange={(e) => setPasswordRegister(e.target.value)}
@@ -251,7 +251,7 @@ export default function Signin() {
               color="primary"
               className={classes.submit}
             >
-              Register
+              회원가입
             </Button>
           </form>
         </div>
