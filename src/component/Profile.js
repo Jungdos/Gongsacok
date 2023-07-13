@@ -118,15 +118,25 @@ const Profile = () => {
       <Typography variant="subtitle1">총 운영자 수: {totalElements}</Typography>
       <Typography variant="subtitle1">총 페이지 수: {totalPages}</Typography>
 
+            {/* 페이지 네이션 */}
       <div className={classes.pagination}>
+            {/* classes.pagination을 사용하면 div요소는 useStyles개체의
+                pagination 클래스에 정의된 스타일을 갖게된다 */}
         {[...Array(totalPages).keys()].map(num => (
+            // 길이가 totalPages인 새배열을 만든 다음 여기에 keys()매서드를 적용.
+            // keys()매서드는 배열 요소의 키가있는 반복자를 반환한다.
           <Typography
             key={num}
             className={classes.pageNumber}
-            onClick={() => setPage(num)}
+            onClick={ () => setPage(num)}
             color={num === page ? "secondary" : "primary"}
           >
             {num + 1}
+            {/* div요소와 map함수를 사용하여 페이지 매김 섹션을 렌더링
+                totalPages변수를 기반으로 페이지 번호를 생성
+                각페이지 번호에 onClick이벤트를 넣어줌
+                페이지 번호를 클릭하면 page상태변수를 업데이트
+                데이터를 가져오기 위해 useEffect 후크를 다시 실행하는 setPage함수가 트리거됨. */}
           </Typography>
         ))}
       </div>
