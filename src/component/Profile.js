@@ -43,7 +43,7 @@ const Profile = () => {
   const radius = 10000;
   const gongsaType = "emer";
 
-  // 컴포넌트가 렌더링될 때 실행되는 useEffect 훅입니다.
+  // 컴포넌트가 렌더링될 때 실행되는 useEffect.
   useEffect(() => {
     // 데이터를 가져오는 비동기 함수를 선언함.
     const fetchData = async () => {
