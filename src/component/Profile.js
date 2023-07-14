@@ -10,7 +10,7 @@ import TotalInfo from './Typography/TotalInfo';
 // CSS 스타일 설정
 const useStyles = makeStyles({
   table: {
-    minWidth: 500 // 테이블의 최소 폭 설정
+    minWidth: 650 // 테이블의 최소 폭 설정
   },
   pagination: {
     display: "flex", // 페이징 섹션을 flex로 설정
