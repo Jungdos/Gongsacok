@@ -1,6 +1,5 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import { Style } from '@material-ui/icons';
 
 // 페이징 컴포넌트
 const TablePagination = ( { classes , totalPages , setPage , page }) => (

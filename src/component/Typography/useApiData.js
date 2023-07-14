@@ -21,9 +21,9 @@ const useApiData = (longitude, latitude, radius, gongsaType, page) => {
                 
                 // 응답에서 필요한 데이터만 추출함.
                 const inputData = res.data.data.map( rowData => ({
-                    cid: rowData. cid,
+                    cid: rowData.cid,
                     name: rowData.name,
-                    createTime: rowData. createTime,
+                    createTime: rowData.createTime,
                     updateTime: rowData.updateTime
                 }));
 
