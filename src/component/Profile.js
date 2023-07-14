@@ -1,147 +1,53 @@
-import React, { useEffect, useState } from 'react'; 
-import axios from 'axios';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Typography from '@material-ui/core/Typography';
+import MyTableContainer from './Profile_Table/TableContainer';
+import TablePagination from './Profile_Table/TablePagination';
+import useApiData from './Typography/useApiData';
+import Loading from './Typography/Loading';
+import Error from './Typography/Error';
+import TotalInfo from './Typography/TotalInfo';
 
-// CSS 스타일을 설정
+// CSS 스타일 설정
 const useStyles = makeStyles({
-  table: { 
-    minWidth: 500 //테이블의 최소 넓이 설정
+  table: {
+    minWidth: 500 // 테이블의 최소 폭 설정
   },
-  pagination: { 
-    display: "flex",  //페이지네이션 섹션을 flex로 설정
-    justifyContent: "center", //섹션 내부 요소들을 중앙에 배치
-    marginTop: 10 //페이지네이션 섹션의 상단 마진 설정
+  pagination: {
+    display: "flex", // 페이징 섹션을 flex로 설정
+    justifyContent: "center", // 섹션 내의 요소를 중앙으로 정렬
+    marginTop: 10 // 페이징 섹션의 상단 여백 설정
   },
-  pageNumber: { 
-    cursor: "pointer", // 페이지 번호위에 마우를 가져다놓으면 포인터로 바뀜
-    marginRight: 10  //페이지 번호의 오른쪽 마진셜정
+  pageNumber: {
+    cursor: "pointer", // 마우스를 페이지 번호 위로 이동하면 포인터로 변경
+    marginRight: 10 // 페이지 번호의 오른쪽 마진
   }
 });
 
 const Profile = () => {
-  const classes = useStyles(); // 스타일 설정을 사용함.
-  // 상태 설정 함수들을 선언함.
-  const [inputData, setInputData] = useState([]);
-  const [totalElements, setTotalElements] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const classes = useStyles(); // 스타일 설정 사용
   const [page, setPage] = useState(0);
 
-  // 위치, 반경, 공사 유형과 같은 몇 가지 변수를 선언함.
+  // 일부 변수 선언 (위치, 반경, 공사 유형)
   const longitude = 12692971;
   const latitude = 3752519;
   const radius = 10000;
   const gongsaType = "emer";
 
-  // 컴포넌트가 렌더링될 때 실행되는 useEffect.
-  useEffect(() => {
-    // 데이터를 가져오는 비동기 함수를 선언함.
-    const fetchData = async () => {
-      try {
-        setLoading(true); // 로딩 상태를 true로 설정
-        setError(null);// 에러 상태를 null로 설정
+  // 사용자 정의 훅을 사용하여 데이터 가져오기
+  const { data, loading, error } = useApiData(longitude, latitude, radius, gongsaType, page);
 
-        // API로부터 데이터를 가져옵니다.
+  // 로딩 중이거나 오류 발생 시 적절한 컴포넌트 렌더링
+  if (loading) return <Loading />;
+  if (error) return <Error message={error} />;
 
-        const res = await axios.post(
-          'https://devawsback.gongsacok.com/pub/listCompany',
-          { offset: page * 2, //현재 페이지에 따라 offset을 설정
-            size: 2, // 페이지 당 사이즈는 2로 설정
-            longitude, 
-            latitude, 
-            radius, 
-            gongsaType }
-        );
-
-        // 응답에서 필요한 데이터만 추출함.
-        const _inputData = res.data.data.map(rowData => ({
-          cid: rowData.cid,
-          name: rowData.name,
-          createTime: rowData.createTime,
-          updateTime: rowData.updateTime
-        }));
-
-        // 상태를 업데이트함.
-        setInputData(_inputData);  // 데이터를 저장
-        setTotalElements(res.data.page.totalElements); // 총 요소 수를 저장
-        setTotalPages(res.data.page.totalPages); // 총 페이지 수를 저장
-        setLoading(false); // 로딩 상태를 false로 설정
-      } catch (e) {
-        // 에러가 발생하면 상태를 업데이트함.
-        setError('데이터를 가져오는 데 실패했습니다'); // 에러 상태를 설정
-        setLoading(false); // 로딩 상태를 false로 설정
-      }
-    };
-
-    // 데이터를 가져옵니다.
-    fetchData();
-  }, [page]); //페이지가 바뀔 떄마다 useEffect를 재실행
-    //반환하는 JSX에서 페이지 번호를 클릭하면 setPage를 호출하여 현재 페이지를 변경함
-
-  // 로딩 중이거나 에러가 발생했을 때 적절한 컴포넌트를 렌더링함.
-  if (loading) return <CircularProgress />;
-  if (error) return <Typography variant="h6">오류: {error}</Typography>;
-
-  // 데이터를 성공적으로 로드했을 때 테이블을 렌더링함.
+  // 데이터가 성공적으로 로드되면 테이블 렌더링
   return (
-    <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="간단한 테이블">
-        <TableHead>
-          <TableRow>
-            <TableCell>관리 번호</TableCell>
-            <TableCell>회사명</TableCell>
-            <TableCell>생성 시간</TableCell>
-            <TableCell>업데이트 시간</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {inputData.map((row, index) => (
-            <TableRow key={index}>
-              <TableCell>{row.cid}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.createTime}</TableCell>
-              <TableCell>{row.updateTime}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <Typography variant="subtitle1">총 운영자 수: {totalElements}</Typography>
-      <Typography variant="subtitle1">총 페이지 수: {totalPages}</Typography>
-
-            {/* 페이지 네이션 */}
-      <div className={classes.pagination}>
-            {/* classes.pagination을 사용하면 div요소는 useStyles개체의
-                pagination 클래스에 정의된 스타일을 갖게된다 */}
-        {[...Array(totalPages).keys()].map(num => (
-            // 길이가 totalPages인 새배열을 만든 다음 여기에 keys()매서드를 적용.
-            // keys()매서드는 배열 요소의 키가있는 반복자를 반환한다.
-          <Typography
-            key={num}
-            className={classes.pageNumber}
-            onClick={ () => setPage(num)}
-            color={num === page ? "secondary" : "primary"}
-          >
-            {num + 1}
-            {/* div요소와 map함수를 사용하여 페이지 매김 섹션을 렌더링
-                totalPages변수를 기반으로 페이지 번호를 생성
-                각페이지 번호에 onClick이벤트를 넣어줌
-                페이지 번호를 클릭하면 page상태변수를 업데이트
-                데이터를 가져오기 위해 useEffect 후크를 다시 실행하는 setPage함수가 트리거됨. */}
-          </Typography>
-        ))}
-      </div>
-    </TableContainer>
+    <>
+      <MyTableContainer classes={classes} inputData={data.inputData} />
+      <TotalInfo totalElements={data.totalElements} totalPages={data.totalPages} />
+      <TablePagination classes={classes} totalPages={data.totalPages} setPage={setPage} page={page} />
+    </>
   );
 };
 
-export default Profile; // Profile 컴포넌트를 내보냅니다.
+export default Profile; // Profile 컴포넌트 내보내기
