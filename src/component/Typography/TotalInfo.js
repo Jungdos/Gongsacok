@@ -4,7 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
   container: {
-    marginTop: '20px'
+    marginTop: '5%',
+    marginLeft: '5%'
   }
 });
 
@@ -13,8 +14,8 @@ const TotalInfo = ({ totalElements, totalPages }) => {
 
   return (
     <div className={classes.container}>
-      <Typography variant="subtitle1">Total number of businesses: {totalElements}</Typography>
-      <Typography variant="subtitle1">Total pages: {totalPages}</Typography>
+      <Typography variant="subtitle1">총 사업체 수: {totalElements}</Typography>
+      <Typography variant="subtitle1">총 페이지 수: {totalPages}</Typography>
     </div>
   );
 };

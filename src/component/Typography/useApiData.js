@@ -16,7 +16,8 @@ const useApiData = (longitude, latitude, radius, gongsaType, page) => {
                 const res = await axios.post(
                     'https://devawsback.gongsacok.com/pub/listCompany',
                     {offset: page * 2, size: 2, longitude, latitude, radius, gongsaType}
-                );//현재 페이지에 따라 offset을 설정 , 페이지 당 사이즈는 2로 설정
+                );
+                //현재 페이지에 따라 offset을 설정 , 페이지 당 사이즈는 2로 설정
                 
                 // 응답에서 필요한 데이터만 추출함.
                 const inputData = res.data.data.map( rowData => ({
