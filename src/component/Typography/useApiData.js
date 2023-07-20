@@ -15,7 +15,7 @@ const useApiData = (longitude, latitude, radius, gongsaType, page) => {
 
                 const res = await axios.post(
                     'https://devawsback.gongsacok.com/pub/listCompany',
-                    {offset: page * 2, size: 2, longitude, latitude, radius, gongsaType}
+                    {offset: page * 1, size: 3, longitude, latitude, radius, gongsaType}
                 );
                 //현재 페이지에 따라 offset을 설정 , 페이지 당 사이즈는 2로 설정
                 
@@ -36,7 +36,7 @@ const useApiData = (longitude, latitude, radius, gongsaType, page) => {
                 setLoading(false);// 로딩 상태를 false로 설정
             }
         };
-        // 데이터를 가져옵니다.
+        // 데이터를 가져옴.
         fetchData();
         //페이지가 바뀔 떄마다 useEffect를 재실행
         //반환하는 JSX에서 페이지 번호를 클릭하면 setPage를 호출하여 현재 페이지를 변경함

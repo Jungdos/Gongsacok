@@ -7,7 +7,7 @@ const BackgroundImage = () => {
                 position: 'fixed',
                 bottom: 0,
                 left: 0,
-                height: '60%',
+                height: '50%',
                 width: '100%',
                 backgroundImage: 'url(https://source.unsplash.com/random)',
                 backgroundSize: 'cover',

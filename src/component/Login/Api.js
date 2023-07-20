@@ -12,13 +12,17 @@ export const loginUser = async (username, password) => {
         // 서버에서 응답이 'success'일 경우 로그인 성공을 처리
         if (response.data.status === 'success') {
             swal('성공', '성공적으로 등록되었습니다!', 'success', {
-                buttons: true,
-                timer: 2000,})
+                buttons: false,
+                timer: 2000,
+            }).then(()=> {
+                window.location.href = '/profile';
+            })
+            
             // 로컬 스토리지에 토큰과 사용자 정보를 저장
             localStorage.setItem('jtoken', response.data.jtoken);
             localStorage.setItem('user', JSON.stringify(response.data));
             // 로그인 성공 후 프로필 페이지로 이동
-            window.location.href = '/profile';
+            
         } else {
             // 로그인 실패 시 경고창을 띄움
             swal('실패', '로그인에 실패했습니다. 사용자 이름과 비밀번호를 확인해 주세요.', 'error');

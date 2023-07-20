@@ -12,11 +12,11 @@ const UserAuth = () => {
         // Fragment는 여러 요소를 그룹화할 때 사용함.
         <>
             <BackgroundImage />  
-            {/* 배경 이미지 컴포넌트를 렌더링합니다. */}
+            {/* 배경 이미지 컴포넌트를 렌더링. */}
             <LoginForm loginUser={loginUser} />  
-            {/* 로그인 폼 컴포넌트를 렌더링하고, loginUser 함수를 props로 전달합니다.*/}
+            {/* 로그인 폼 컴포넌트를 렌더링하고, loginUser 함수를 props로 전달.*/}
             <RegisterForm registerUser={registerUser} />  
-            {/* 회원가입 폼 컴포넌트를 렌더링하고, registerUser 함수를 props로 전달합니다.*/}
+            {/* 회원가입 폼 컴포넌트를 렌더링하고, registerUser 함수를 props로 전달.*/}
         </>
     );
 };
